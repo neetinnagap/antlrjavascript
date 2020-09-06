@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANTLR Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <textarea cols="30" rows="10" v-model="inputData" @keyup.enter="process"></textarea>
+        <div v-for="od in outputData" :key="od.command">
+            <h3 v-if="od.command === 'TITLE'">{{ od.message }}</h3>
+            <p v-else>{{ od.message }}</p>
+        </div>
+    </div>
+
+<script>
+
+    var app = new Vue({
+    el: '#app',
+    data: {
+        inputData: '',
+        outputData: []
+    },
+    methods: {
+        process() {
+            fetch('http://localhost:1337?input='+encodeURIComponent(this.inputData))
+              .then(response => response.json())
+              .then(list => this.outputData = list);
+        }
+    }
+    })
+</script>
+</body>
+</html>
